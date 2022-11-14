@@ -28,7 +28,8 @@ public:
 		}
 
 		if (ria.width <= 0) {
-			err = errors::make_error("%s - ria.width is not positive: %Lf",
+			err = errors::make_terror(errors::err_type::invalid_argument,
+				"%s - ria.width is not positive: %Lf",
 				code_locationc(), ria.width);
 			return;
 		}
@@ -45,13 +46,15 @@ int main() {
 
 	rectangle r1(ria, err);
 	if (err) {
-		std::cerr << "Something went bad: " << err->message() << std::endl;
+		std::cerr << "Something went bad - " << errors::str(err->type())
+			<< " : " << err->message() << std::endl;
 	}
 
 	ria.height = 1;
 	rectangle r2(ria, err);
 	if (err) {
-		std::cerr << "Something went bad: " << err->message() << std::endl;
+		std::cerr << "Something went bad - " << errors::str(err->type())
+			<< " : " << err->message() << std::endl;
 	}
 
 	ria.width = 2;
