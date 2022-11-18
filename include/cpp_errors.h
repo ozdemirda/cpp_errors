@@ -81,27 +81,27 @@ inline std::string str(err_type e) {
 class __error;
 
 // 'error' is a std::unique_ptr that encapsulates a vector of
-// error tuples and functions to modify them.
+// error couples and functions to modify them.
 typedef std::unique_ptr<__error> error;
 
-// Definition of 'error_tuple'
-typedef struct __error_tuple_s {
+// Definition of 'error_couple'
+typedef struct __error_couple_s {
 	err_type type;
 	std::string message;
 
-	// error_tuple encapsulates the error information
-	__error_tuple_s(err_type t, const char * m):
+	// error_couple encapsulates the error information
+	__error_couple_s(err_type t, const char * m):
 		type(t), message(m)
 	{}
-} error_tuple;
+} error_couple;
 
 class __error {
 private:
-	std::vector<error_tuple> m_error_tuples;
+	std::vector<error_couple> m_error_couples;
 
 	// The __append function is quite similar to printf family.
-	// Error tuple containing the error message gets pushed
-	// to the end of m_error_tuples.
+	// Error couple containing the error message gets pushed
+	// to the end of m_error_couples.
 	void __append(err_type type,
 			std::size_t size, const char * fmt, ...) {
 		va_list args;
@@ -111,7 +111,7 @@ private:
 
 		vsnprintf(buffer, size, fmt, args);
 
-		m_error_tuples.emplace_back(type, buffer);
+		m_error_couples.emplace_back(type, buffer);
 
 		delete[] buffer;
 
@@ -130,7 +130,7 @@ public:
 	}
 
 	// The function append can be used to append an ordinary
-	// error tuple to the existing tuples.
+	// error couple to the existing couples.
 	template <typename... Args>
 	void append(const char* fmt, Args... args) {
 		__append(err_type::generic_error,
@@ -138,8 +138,8 @@ public:
 	}
 
 	// The function sappend can be used to append an error
-	// tuple with a specific size limit for its message to
-	// the existing error tuples.
+	// couple with a specific size limit for its message to
+	// the existing error couples.
 	template <typename... Args>
 	void sappend(std::size_t size, const char* fmt, Args... args) {
 		__append(err_type::generic_error,
@@ -147,8 +147,8 @@ public:
 	}
 
 	// The function tappend can used to append an error
-	// tuple with a specific error type to the existing
-	// error tuples.
+	// couple with a specific error type to the existing
+	// error couples.
 	template <typename... Args>
 	void tappend(err_type type,
 			const char* fmt, Args... args) {
@@ -156,8 +156,8 @@ public:
 	}
 
 	// The function tsappend can be used to append an error
-	// tuple with a specific size and a specific error type
-	// to the existing error tuples.
+	// couple with a specific size and a specific error type
+	// to the existing error couples.
 	template <typename... Args>
 	void tsappend(err_type type,
 			std::size_t size, const char* fmt, Args... args) {
@@ -165,30 +165,30 @@ public:
 	}
 
 	// The function message can be used to get the message
-	// of the first error tuple. It's quite useful for simple
-	// errors that are represented by one tuple.
+	// of the first error couple. It's quite useful for simple
+	// errors that are represented by one couple.
 	const std::string& message() {
-		return m_error_tuples[0].message;
+		return m_error_couples[0].message;
 	}
 
 	// The function type can be used to get the error type
-	// of the first error tuple. It's quite useful for simple
-	// errors that are represented by one tuple.
+	// of the first error couple. It's quite useful for simple
+	// errors that are represented by one couple.
 	err_type type() {
-		return m_error_tuples[0].type;
+		return m_error_couples[0].type;
 	}
 
 	// The function cmessage can be used to get the c-like message
-	// of the first error tuple. It's quite useful for simple
-	// errors that are represented by one tuple.
+	// of the first error couple. It's quite useful for simple
+	// errors that are represented by one couple.
 	const char * cmessage() {
-		return m_error_tuples[0].message.c_str();
+		return m_error_couples[0].message.c_str();
 	}
 
-	// The function tuples can be used to retrieve the vector of
-	// error tuples.
-	const std::vector<error_tuple>& tuples() {
-		return m_error_tuples;
+	// The function couples can be used to retrieve the vector of
+	// error couples.
+	const std::vector<error_couple>& couples() {
+		return m_error_couples;
 	}
 };
 
@@ -226,7 +226,7 @@ inline error make_terror(err_type type,
 // The function make_tserror can be used to create errors of
 // a specific type with a specific message size limit. These
 // specific values do not get inherited by the appended error
-// tuples to the object returned by this function.
+// couples to the object returned by this function.
 template <typename... Args>
 inline error make_tserror(err_type type, std::size_t size,
 		const char* fmt, Args... args) {

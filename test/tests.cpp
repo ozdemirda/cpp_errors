@@ -64,9 +64,9 @@ TEST(TestErrors, TestBasicAppend) {
 	err = errors::make_serror(18, "some problem: %s", "ops");
 	err->append("hey there %s", "mate");
 
-	auto tuples = err->tuples();
-	EXPECT_STREQ(tuples[0].message.c_str(), "some problem: ops");
-	EXPECT_STREQ(tuples[1].message.c_str(), "hey there mate");
+	auto couples = err->couples();
+	EXPECT_STREQ(couples[0].message.c_str(), "some problem: ops");
+	EXPECT_STREQ(couples[1].message.c_str(), "hey there mate");
 }
 
 TEST(TestErrors, TestSizedAppend) {
@@ -74,9 +74,9 @@ TEST(TestErrors, TestSizedAppend) {
 	err = errors::make_error("some problem: %s", "ops");
 	err->sappend(8, "hey there %s", "mate");
 
-	auto tuples = err->tuples();
-	EXPECT_STREQ(tuples[0].message.c_str(), "some problem: ops");
-	EXPECT_STREQ(tuples[1].message.c_str(), "hey the");
+	auto couples = err->couples();
+	EXPECT_STREQ(couples[0].message.c_str(), "some problem: ops");
+	EXPECT_STREQ(couples[1].message.c_str(), "hey the");
 }
 
 TEST(TestErrors, TestTypedAppend) {
@@ -85,12 +85,12 @@ TEST(TestErrors, TestTypedAppend) {
 	err->tappend(errors::err_type::already_exists,
 			"hey there %s", "mate");
 
-	auto tuples = err->tuples();
-	EXPECT_STREQ(tuples[0].message.c_str(), "some problem: ops");
-	EXPECT_EQ(tuples[0].type, errors::err_type::generic_error);
+	auto couples = err->couples();
+	EXPECT_STREQ(couples[0].message.c_str(), "some problem: ops");
+	EXPECT_EQ(couples[0].type, errors::err_type::generic_error);
 
-	EXPECT_STREQ(tuples[1].message.c_str(), "hey there mate");
-	EXPECT_EQ(tuples[1].type, errors::err_type::already_exists);
+	EXPECT_STREQ(couples[1].message.c_str(), "hey there mate");
+	EXPECT_EQ(couples[1].type, errors::err_type::already_exists);
 }
 
 TEST(TestErrors, TestTypedSizedAppend) {
@@ -99,11 +99,11 @@ TEST(TestErrors, TestTypedSizedAppend) {
 	err->tsappend(errors::err_type::already_exists,
 			8, "hey there %s", "mate");
 
-	auto tuples = err->tuples();
-	EXPECT_STREQ(tuples[0].message.c_str(), "some problem: ops");
-	EXPECT_EQ(tuples[0].type, errors::err_type::generic_error);
-	EXPECT_STREQ(tuples[1].message.c_str(), "hey the");
-	EXPECT_EQ(tuples[1].type, errors::err_type::already_exists);
+	auto couples = err->couples();
+	EXPECT_STREQ(couples[0].message.c_str(), "some problem: ops");
+	EXPECT_EQ(couples[0].type, errors::err_type::generic_error);
+	EXPECT_STREQ(couples[1].message.c_str(), "hey the");
+	EXPECT_EQ(couples[1].type, errors::err_type::already_exists);
 }
 
 TEST(TestErrors, TestErrorTypeStrings) {
@@ -114,10 +114,10 @@ TEST(TestErrors, TestErrorTypeStrings) {
 	err->tappend(errors::err_type::null_pointer,
 			"some other error %s", "blah");
 
-	auto tuples = err->tuples();
-	EXPECT_STREQ(errors::c_str((tuples[0].type)), "generic_error");
-	EXPECT_STREQ(errors::c_str((tuples[1].type)), "already_exists");
-	EXPECT_STREQ(errors::c_str((tuples[2].type)), "null_pointer");
+	auto couples = err->couples();
+	EXPECT_STREQ(errors::c_str((couples[0].type)), "generic_error");
+	EXPECT_STREQ(errors::c_str((couples[1].type)), "already_exists");
+	EXPECT_STREQ(errors::c_str((couples[2].type)), "null_pointer");
 }
 
 int main_(int argc, char ** argv) {
