@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <error.h>
+#include <cpp_errors.h>
 #include <code_location.h>
 #include <string>
 

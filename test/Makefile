@@ -9,7 +9,7 @@ CFLAGS = -I$(INCLUDE_DIR) -Wall -O3
 LFLAGS = -lgtest -lgtest_main
 
 HEADER_FILES = $(INCLUDE_DIR)/code_location.h \
-	$(INCLUDE_DIR)/error.h \
+	$(INCLUDE_DIR)/cpp_errors.h \
 	$(INCLUDE_DIR)/error_types/predefined_errors.h \
 	$(INCLUDE_DIR)/error_types/user_defined_errors.h
 
