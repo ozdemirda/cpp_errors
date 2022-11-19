@@ -2,6 +2,15 @@
 #include <code_location.h>
 #include <iostream>
 
+// Example usage of errors with constructors.
+// As some constructors may try doing some work,
+// and that work may fail, constructors themselves
+// may also fail. Instead of keeping track of such
+// a state via member variables, and checking for
+// their values (like 'bool init_successful' etc),
+// reference to an error pointer may be used. This
+// example tries to give an idea about how to do that.
+
 class rectangle {
 private:
 	long double height;

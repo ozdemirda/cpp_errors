@@ -41,7 +41,7 @@ Footer
 
 namespace {
 // The default max size for error message buffer
-const static std::size_t default_error_message_size = 128;
+const static std::size_t default_error_message_size = 256;
 }
 
 namespace errors {
