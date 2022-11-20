@@ -42,6 +42,7 @@ Footer
 namespace {
 // The default max size for error message buffer
 const static std::size_t default_error_message_size = 256;
+const static std::string static_default_message = "";
 }
 
 namespace errors {
@@ -107,7 +108,12 @@ private:
 		va_list args;
 		va_start(args, fmt);
 
-		char* buffer = new char[size];
+		char* buffer = new(std::nothrow) char[size];
+		if (!buffer) {
+			fprintf(stderr, "Failed to allocate memory for error message\n");
+			vfprintf(stderr, fmt, args);
+			return;
+		}
 
 		vsnprintf(buffer, size, fmt, args);
 
@@ -168,21 +174,36 @@ public:
 	// of the first error couple. It's quite useful for simple
 	// errors that are represented by one couple.
 	const std::string& message() {
-		return m_error_couples[0].message;
+		if (m_error_couples.size() > 0) {
+			return m_error_couples[0].message;
+		}
+
+		fprintf(stderr, "Function message() was called on an empty error\n");
+		return static_default_message;
 	}
 
 	// The function type can be used to get the error type
 	// of the first error couple. It's quite useful for simple
 	// errors that are represented by one couple.
 	err_type type() {
-		return m_error_couples[0].type;
+		if (m_error_couples.size() > 0) {
+			return m_error_couples[0].type;
+		}
+
+		fprintf(stderr, "Function type() was called on an empty error\n");
+		return err_type::generic_error;
 	}
 
 	// The function cmessage can be used to get the c-like message
 	// of the first error couple. It's quite useful for simple
 	// errors that are represented by one couple.
 	const char * cmessage() {
-		return m_error_couples[0].message.c_str();
+		if (m_error_couples.size() > 0) {
+			return m_error_couples[0].message.c_str();
+		}
+
+		fprintf(stderr, "Function cmessage() was called on an empty error\n");
+		return static_default_message.c_str();
 	}
 
 	// The function couples can be used to retrieve the vector of
