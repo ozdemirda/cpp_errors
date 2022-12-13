@@ -40,6 +40,7 @@ void caller_of_func() {
     if (err) {
         std::cerr << "Houston, we have a problem: "
             << err->message() << std::endl;
+            return;
     }
 
     // Do some other meaningful work
