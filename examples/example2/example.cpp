@@ -41,6 +41,7 @@ int main() {
 		// error message to the standard error stream.
 		std::cerr << errors::str(err->type()) << ":"
 			<< err->message() << std::endl;
+		return 1;
 	}
 
 	return 0;
