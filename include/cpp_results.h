@@ -26,6 +26,7 @@ SOFTWARE.
 
 #include <cpp_errors.h>
 #include <assert.h>
+#include <iostream>
 #include <utility>
 #include <variant>
 
