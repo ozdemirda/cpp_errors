@@ -20,7 +20,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-Footer
 */
 
 #pragma once
@@ -38,20 +37,12 @@ namespace _code_location {
 // directly. The macros provided below should be used,
 // so that the preprocessor can propagate the correct
 // values of the arguments to this function.
-inline std::string _code_loc(const char* function_name,
-		const char* file_name, int line_number) {
-	std::stringstream ss;
-
-	ss << "[ " << file_name << ":" << line_number
-			<< " => " << function_name << " ]";
-
-	return ss.str();
+inline std::string _code_loc(const char* file_name, int line_number, const char* function_name) {
+  std::stringstream ss;
+  ss << "[" << file_name << ":" << line_number << " - " << function_name << "]";
+  return ss.str();
 }
-} // namespace _code_location
-
-#ifdef _MSC_VER
-#define __PRETTY_FUNCTION__ __FUNCTION__
-#endif
+}  // namespace _code_location
 
 // Unfortunately the following macros seem to be necessary, as the
 // required arguments (function name, file name and line number)
@@ -59,12 +50,4 @@ inline std::string _code_loc(const char* function_name,
 // community can offer a better solution for this. I'd be glad
 // to hear about alternatives.
 
-#define code_location() _code_location::_code_loc( \
-		__PRETTY_FUNCTION__, \
-		__FILE__, \
-		__LINE__)
-
-#define code_locationc() _code_location::_code_loc( \
-		__PRETTY_FUNCTION__, \
-		__FILE__, \
-		__LINE__).c_str()
+#define code_location() _code_location::_code_loc(__FILE__, __LINE__, __FUNCTION__).c_str()

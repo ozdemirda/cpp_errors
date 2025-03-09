@@ -5,7 +5,7 @@ OBJECT_DIR = objects
 
 _create_object_dir := $(shell mkdir -p $(OBJECT_DIR))
 
-CFLAGS = -I$(INCLUDE_DIR) -Wall -O3
+CFLAGS = -I$(INCLUDE_DIR) -Wall -g3 -O3
 LFLAGS = -lgtest -lgtest_main
 
 HEADER_FILES = $(INCLUDE_DIR)/code_location.h \
